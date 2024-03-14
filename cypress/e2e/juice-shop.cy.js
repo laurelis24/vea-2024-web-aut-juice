@@ -1,4 +1,5 @@
 import { HomePage } from "../pageObjects/HomePage";
+import { LoginPage } from "../pageObjects/LoginPage";
 
 describe("Juice-shop scenarios", () => {
   context("Without auto login", () => {
@@ -9,32 +10,35 @@ describe("Juice-shop scenarios", () => {
     });
 
     it("Login", () => {
-      // Click Account button
-      // Click Login button
-      // Set email value to "demo"
-      // Set password value to "demo"
-      // Click Log in
-      // Click Account button
-      // Validate that "demo" account name appears in the menu section
+      HomePage.accountButton.click();
+      HomePage.loginButton.click();
+      LoginPage.emailField.type("demo");
+      LoginPage.passwordField.type("demo");
+      LoginPage.loginButton.click();
+      HomePage.accountButton.click();
+      HomePage.profileMenuOption.should("contain", "demo");
     });
 
-    it("Registration", () => {
-      // Click Account button
-      // Login button
-      // Click "Not yet a customer?"
-      // Find - how to generate random number in JS
-      // Use that number to genarate unique email address, e.g.: email_7584@ebox.com
-      // Save that email address to some variable
-      // Fill in password field and repeat password field with same password
-      // Click on Security Question menu
-      // Select  "Name of your favorite pet?"
-      // Fill in answer
-      // Click Register button
-      // Set email value to previously created email
-      // Set password value to previously used password value
-      // Click login button
-      // Click Account button
+    it.only("Registration", () => {
+      HomePage.accountButton.click();
+      HomePage.loginButton.click();
+      LoginPage.notYetCostumerLink.first("a.primary-link").click();
+      let randomEmail = `lauris_${Math.round(Math.random() * 100) + 100}@inbox.lv`;
+      LoginPage.newUserEmail.type(randomEmail);
+      LoginPage.newUserPassword.type("password");
+      LoginPage.newUserPasswordRepat.type("password");
+      LoginPage.securityQuestions.click();
+      LoginPage.nameOfYourFavoritePetOption.click();
+      LoginPage.securityAnswer.type("Fredis");
+      LoginPage.registerButton.click();
+      LoginPage.emailField.type(randomEmail);
+      LoginPage.passwordField.type("password");
+      LoginPage.loginButton.click();
       // Validate that account name (with previously created email address) appears in the menu section
+      HomePage.accountButton.click();
+      HomePage.profileMenuOption.click();
+
+      // ProfilePage.email.should("contain", randomEmail);
     });
   });
 
